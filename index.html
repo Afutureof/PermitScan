@@ -494,16 +494,25 @@ async function readFile(file) {
   });
 }
 
-async function callAPI(system, messages, maxTokens) {
-  const resp = await fetch('https://test.28jjk4mrnv.workers.dev', {
-    method:'POST',
-    headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01'},
-    body: JSON.stringify({model:'claude-haiku-4-5-20251001', max_tokens:maxTokens, system, messages})
-  });
-  const data = await resp.json();
-  if (!resp.ok) throw new Error(data.error?.message || `HTTP ${resp.status}: ${JSON.stringify(data)}`);
-  if (!data.content) throw new Error(`Respuesta inesperada: ${JSON.stringify(data)}`);
-  return data.content.map(b=>b.text||'').join('');
+async function callAPI(system, messages, maxTokens, retries=3) {
+  for (let attempt=0; attempt<retries; attempt++) {
+    const resp = await fetch('https://test.28jjk4mrnv.workers.dev', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01'},
+      body: JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:maxTokens, system, messages})
+    });
+    const data = await resp.json();
+    if (data.error?.type === 'rate_limit_error') {
+      const wait = (attempt+1) * 15000;
+      console.log(`Rate limit, esperando ${wait/1000}s...`);
+      await new Promise(r=>setTimeout(r,wait));
+      continue;
+    }
+    if (!resp.ok) throw new Error(data.error?.message || `HTTP ${resp.status}`);
+    if (!data.content) throw new Error(`Respuesta inesperada: ${JSON.stringify(data)}`);
+    return data.content.map(b=>b.text||'').join('');
+  }
+  throw new Error('Rate limit persistente. Espera 1 minuto y reintenta.');
 }
 
 async function summarizeBatch(batch, bi, indices) {
