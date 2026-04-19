@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PermitScan AI · España</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#F7F6F3;--surface:#FFF;--surface2:#F0EEE9;
+    --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);
+    --text:#1A1916;--text2:#6B6860;--text3:#9E9B95;
+    --green:#2D7A45;--green-bg:#EAF4EE;
+    --amber:#B06000;--amber-bg:#FFF4E0;
+    --red:#C0392B;--red-bg:#FDECEA;
+    --blue:#1A5FA8;--blue-bg:#EAF1FB;
+    --accent:#1A5FA8;
+    --font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+    --r:10px;--rl:16px;
+  }
+  body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6}
+  .app{max-width:900px;margin:0 auto;padding:2rem 1.5rem}
+
+  /* Header */
+  .header{margin-bottom:2rem}
+  .header-top{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  .logo{width:32px;height:32px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center}
+  .logo svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2}
+  .app-name{font-size:13px;font-weight:500;color:var(--text2);letter-spacing:.05em;text-transform:uppercase}
+  h1{font-size:28px;font-weight:600;letter-spacing:-.01em}
+  .header p{color:var(--text2);margin-top:6px;font-size:14px}
+
+  /* API key banner */
+  .api-banner{background:var(--amber-bg);border:1px solid rgba(176,96,0,.25);border-radius:var(--rl);padding:14px 16px;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:12px}
+  .api-banner svg{width:16px;height:16px;stroke:var(--amber);fill:none;stroke-width:2;flex-shrink:0;margin-top:1px}
+  .api-banner-text{flex:1;font-size:13px;color:var(--amber)}
+  .api-banner-text strong{display:block;margin-bottom:4px;font-weight:600}
+  .api-key-row{display:flex;gap:8px;margin-top:8px}
+  .api-key-input{flex:1;padding:7px 10px;border:1px solid rgba(176,96,0,.3);border-radius:var(--r);font-family:var(--mono);font-size:12px;background:#fff;color:var(--text);outline:none}
+  .api-key-input:focus{border-color:var(--amber)}
+  .btn-save-key{padding:7px 14px;background:var(--amber);color:#fff;border:none;border-radius:var(--r);font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer}
+  .btn-save-key:hover{background:#8F4E00}
+  .api-ok{background:var(--green-bg);border-color:rgba(45,122,69,.25)}
+  .api-ok svg{stroke:var(--green)}
+  .api-ok .api-banner-text{color:var(--green)}
+
+  /* Tabs */
+  .tabs{display:flex;border-bottom:1px solid var(--border2);margin-bottom:1.5rem}
+  .tab{padding:8px 18px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;user-select:none}
+  .tab:hover{color:var(--text)}
+  .tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+  .tab.hidden{display:none}
+
+  /* Card */
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:1.5rem;margin-bottom:1rem}
+  .card-title{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:1rem}
+
+  /* Upload */
+  .upload-zone{border:2px dashed var(--border2);border-radius:var(--rl);padding:1.75rem 1.5rem;text-align:center;cursor:pointer;transition:all .2s}
+  .upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:var(--blue-bg)}
+  .uicon{width:44px;height:44px;margin:0 auto 12px;background:var(--blue-bg);border-radius:12px;display:flex;align-items:center;justify-content:center}
+  .uicon svg{width:22px;height:22px;stroke:var(--blue);fill:none;stroke-width:1.5}
+  .utitle{font-size:15px;font-weight:500;margin-bottom:4px}
+  .usub{font-size:13px;color:var(--text2)}
+  .utypes{font-size:11px;color:var(--text3);margin-top:6px;font-family:var(--mono)}
+  .upload-btns{display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap}
+  .btn-up{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid var(--border2);border-radius:8px;font-family:var(--font);font-size:12px;font-weight:500;cursor:pointer;background:var(--surface);color:var(--text2);transition:all .15s}
+  .btn-up:hover{border-color:var(--accent);color:var(--accent);background:var(--blue-bg)}
+  .btn-up svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}
+  input[type=file]{display:none}
+
+  /* File list */
+  .file-list-wrap{margin-top:1rem}
+  .file-list-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .file-count{font-size:13px;color:var(--text2)}
+  .btn-clear{font-size:12px;color:var(--red);cursor:pointer;border:none;background:none;font-family:var(--font)}
+  .btn-clear:hover{text-decoration:underline}
+  .file-list{display:flex;flex-direction:column;gap:5px;max-height:220px;overflow-y:auto}
+  .fitem{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--surface2);border-radius:var(--r);border:1px solid var(--border);transition:all .3s}
+  .fitem.processing{border-color:rgba(26,95,168,.3);background:var(--blue-bg)}
+  .fitem.done{border-color:rgba(45,122,69,.3);background:var(--green-bg)}
+  .fext{width:28px;height:28px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;font-family:var(--mono);flex-shrink:0;background:var(--red-bg);color:var(--red);text-transform:uppercase}
+  .fext.txt{background:var(--green-bg);color:var(--green)}
+  .fext.doc{background:var(--blue-bg);color:var(--blue)}
+  .fext.xls{background:var(--green-bg);color:var(--green)}
+  .finfo{flex:1;min-width:0}
+  .fname{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .fmeta{font-size:11px;color:var(--text3)}
+  .fstatus{font-size:11px;font-weight:500;flex-shrink:0;min-width:60px;text-align:right}
+  .fstatus.processing{color:var(--blue)}
+  .fstatus.done{color:var(--green)}
+  .fremove{width:20px;height:20px;border:none;background:none;cursor:pointer;color:var(--text3);border-radius:3px;font-size:11px;flex-shrink:0}
+  .fremove:hover{background:var(--border);color:var(--text)}
+  .skipped-note{font-size:12px;color:var(--text3);margin-top:6px;padding:6px 10px;background:var(--surface2);border-radius:6px}
+  .info-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;background:var(--blue-bg);border:1px solid rgba(26,95,168,.2);border-radius:8px;font-size:12px;color:var(--blue);margin-top:8px}
+  .info-pill svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+
+  /* Form */
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .fg{display:flex;flex-direction:column;gap:4px}
+  .fg.full{grid-column:1/-1}
+  label{font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}
+  select,input[type=text],input[type=number],textarea{padding:8px 10px;border:1px solid var(--border2);border-radius:var(--r);font-family:var(--font);font-size:13px;color:var(--text);background:var(--surface);outline:none;transition:border-color .15s;width:100%}
+  select:focus,input:focus,textarea:focus{border-color:var(--accent)}
+  textarea{resize:vertical;min-height:80px;line-height:1.5}
+  .check-group{display:flex;flex-wrap:wrap;gap:7px}
+  .ci{display:flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid var(--border2);border-radius:20px;cursor:pointer;transition:all .15s;user-select:none}
+  .ci:hover{border-color:var(--accent);background:var(--blue-bg)}
+  .ci input{width:13px;height:13px;accent-color:var(--accent);cursor:pointer}
+  .ci span{font-size:12px;font-weight:500}
+  .ci.checked{border-color:var(--accent);background:var(--blue-bg);color:var(--blue)}
+
+  /* Analyze button */
+  .btn-analyze{width:100%;padding:13px;background:var(--accent);color:#fff;border:none;border-radius:var(--r);font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:1rem;display:flex;align-items:center;justify-content:center;gap:8px}
+  .btn-analyze:hover:not(:disabled){background:#144D8A}
+  .btn-analyze:disabled{opacity:.5;cursor:not-allowed}
+
+  /* Progress */
+  .proc-panel{margin-top:1rem;display:none}
+  .proc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .proc-title{font-size:13px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}
+  .proc-eta{font-size:12px;color:var(--text3)}
+  .progress-bar-bg{height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-bottom:12px}
+  .progress-bar-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .4s}
+  .batch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+  .batch-card{padding:10px 12px;border-radius:var(--r);border:1px solid var(--border);background:var(--surface2);transition:all .3s}
+  .batch-card.active{border-color:rgba(26,95,168,.4);background:var(--blue-bg)}
+  .batch-card.done{border-color:rgba(45,122,69,.4);background:var(--green-bg)}
+  .batch-card.warn{border-color:rgba(176,96,0,.4);background:var(--amber-bg)}
+  .bc-label{font-size:11px;font-weight:600;color:var(--text2);margin-bottom:4px;display:flex;align-items:center;gap:5px}
+  .bc-label.active{color:var(--blue)}
+  .bc-label.done{color:var(--green)}
+  .bc-label.warn{color:var(--amber)}
+  .bc-files{font-size:11px;color:var(--text3);line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .final-step{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:var(--r);border:1px solid var(--border);background:var(--surface2);margin-top:8px;font-size:13px;color:var(--text2);transition:all .3s}
+  .final-step.active{border-color:rgba(26,95,168,.4);background:var(--blue-bg);color:var(--blue);font-weight:500}
+  .final-step.done{border-color:rgba(45,122,69,.4);background:var(--green-bg);color:var(--green);font-weight:500}
+  .spinner-sm{width:12px;height:12px;border:2px solid rgba(26,95,168,.2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;flex-shrink:0}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* Results */
+  .risk-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600}
+  .risk-badge.rojo{background:var(--red-bg);color:var(--red)}
+  .risk-badge.amarillo{background:var(--amber-bg);color:var(--amber)}
+  .risk-badge.verde{background:var(--green-bg);color:var(--green)}
+  .rdot{width:8px;height:8px;border-radius:50%;background:currentColor}
+  .score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
+  .sc{padding:1rem;border-radius:var(--r);border:1px solid var(--border);text-align:center}
+  .sc .sc-l{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+  .sc .sc-v{font-size:22px;font-weight:600}
+  .sc.verde{background:var(--green-bg);border-color:rgba(45,122,69,.2)}.sc.verde .sc-v{color:var(--green)}
+  .sc.amarillo{background:var(--amber-bg);border-color:rgba(176,96,0,.2)}.sc.amarillo .sc-v{color:var(--amber)}
+  .sc.rojo{background:var(--red-bg);border-color:rgba(192,57,43,.2)}.sc.rojo .sc-v{color:var(--red)}
+  .ritem{padding:12px 14px;border-radius:var(--r);border:1px solid var(--border);margin-bottom:8px;background:var(--surface)}
+  .rih{display:flex;align-items:flex-start;gap:10px;margin-bottom:6px}
+  .rpill{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;flex-shrink:0;margin-top:1px;text-transform:uppercase;letter-spacing:.04em}
+  .rpill.rojo{background:var(--red-bg);color:var(--red)}
+  .rpill.amarillo{background:var(--amber-bg);color:var(--amber)}
+  .rpill.verde{background:var(--green-bg);color:var(--green)}
+  .rtitle{font-size:13px;font-weight:500}
+  .rdesc{font-size:13px;color:var(--text2);line-height:1.5}
+  .rmit{margin-top:8px;padding:8px 10px;background:var(--surface2);border-radius:6px;font-size:12px;color:var(--text2);border-left:3px solid var(--accent)}
+  .rmit strong{color:var(--text)}
+  .hgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  .hitem{padding:10px 12px;border-radius:var(--r);border:1px solid var(--border);background:var(--surface)}
+  .hname{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+  .hval{font-size:13px;color:var(--text)}
+  .hst{display:inline-block;margin-top:4px;font-size:11px;padding:1px 7px;border-radius:8px;font-weight:500}
+  .hst.ok{background:var(--green-bg);color:var(--green)}
+  .hst.pendiente{background:var(--amber-bg);color:var(--amber)}
+  .hst.faltante{background:var(--red-bg);color:var(--red)}
+  .hst.nd{background:var(--surface2);color:var(--text3)}
+  .btn-exp{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--border2);border-radius:var(--r);font-family:var(--font);font-size:13px;font-weight:500;cursor:pointer;background:var(--surface);color:var(--text);transition:all .15s}
+  .btn-exp:hover{background:var(--surface2);border-color:var(--accent);color:var(--accent)}
+  .exp-row{display:flex;gap:8px;margin-top:1rem;flex-wrap:wrap}
+  .disclaimer{font-size:12px;color:var(--text3);background:var(--surface2);border-radius:var(--r);padding:10px 12px;margin-top:1rem}
+  .error-box{padding:12px 14px;background:var(--red-bg);border:1px solid rgba(192,57,43,.2);border-radius:var(--r);color:var(--red);font-size:13px;margin-top:1rem}
+  .md-out{font-size:13px;color:var(--text2);line-height:1.65}
+  .md-out p{margin-bottom:8px}
+  .md-out strong{color:var(--text);font-weight:600}
+  .hidden{display:none}
+  .mt1{margin-top:.5rem}
+
+  @media(max-width:600px){
+    .form-grid{grid-template-columns:1fr}
+    .fg.full{grid-column:1}
+    .score-grid{grid-template-columns:repeat(2,1fr)}
+    .hgrid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-top">
+      <div class="logo"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+      <span class="app-name">PermitScan AI · España</span>
+    </div>
+    <h1>Automated Permitting Risk Scanner</h1>
+    <p>Analiza documentación de proyectos renovables y detecta riesgos de permitting automáticamente.</p>
+  </div>
+
+  <!-- API Key Banner -->
+  <div class="api-banner" id="apiBanner">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <div class="api-banner-text">
+      <strong>Introduce tu API key de Anthropic para empezar</strong>
+      Necesitas una API key de <a href="https://console.anthropic.com" target="_blank" style="color:inherit">console.anthropic.com</a>. Se guarda solo en tu navegador (localStorage), nunca se envía a ningún servidor externo.
+      <div class="api-key-row">
+        <input type="password" class="api-key-input" id="apiKeyInput" placeholder="sk-ant-api03-…" oninput="checkKey()">
+        <button class="btn-save-key" onclick="saveKey()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" data-tab="input" onclick="switchTab('input')">Análisis</div>
+    <div class="tab hidden" data-tab="results" id="tab-btn-results" onclick="switchTab('results')">Resultados</div>
+    <div class="tab" data-tab="about" onclick="switchTab('about')">Guía</div>
+  </div>
+
+  <!-- INPUT PANE -->
+  <div id="pane-input">
+
+    <div class="card">
+      <div class="card-title">1 · Documentación del proyecto</div>
+      <div class="upload-zone" id="dropZone" ondragover="onDragOver(event)" ondragleave="onDragLeave()" ondrop="onDrop(event)">
+        <div class="uicon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+        <div class="utitle">Arrastra carpeta o archivos aquí</div>
+        <div class="usub">Archivos .xsig y no legibles se omiten automáticamente</div>
+        <div class="upload-btns">
+          <button class="btn-up" onclick="document.getElementById('iFiles').click();event.stopPropagation()">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Archivos
+          </button>
+          <button class="btn-up" onclick="document.getElementById('iFolder').click();event.stopPropagation()">
+            <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>Carpeta
+          </button>
+        </div>
+        <div class="utypes">PDF · DOCX · TXT · XLSX · CSV</div>
+      </div>
+      <input type="file" id="iFiles" multiple accept=".pdf,.docx,.txt,.xlsx,.csv" onchange="addFiles(this.files)">
+      <input type="file" id="iFolder" webkitdirectory multiple onchange="addFiles(this.files)">
+
+      <div id="fileListWrap" class="hidden file-list-wrap">
+        <div class="file-list-header">
+          <span class="file-count" id="fileCount"></span>
+          <button class="btn-clear" onclick="clearAll()">Eliminar todo</button>
+        </div>
+        <div class="file-list" id="fileList"></div>
+        <div id="skippedNote" class="skipped-note hidden"></div>
+        <div class="info-pill" id="parallelPill" style="display:none">
+          <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span id="parallelPillText"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">2 · Contexto del proyecto</div>
+      <div class="form-grid">
+        <div class="fg"><label>Nombre del proyecto</label><input type="text" id="projName" placeholder="Ej. PV Murcia Sur 50MW"></div>
+        <div class="fg"><label>Tecnología</label>
+          <select id="projTech"><option value="">Seleccionar…</option><option>Solar PV</option><option>BESS</option><option>Eólico</option><option>Híbrido PV+BESS</option></select>
+        </div>
+        <div class="fg"><label>Potencia (MW)</label><input type="number" id="projMW" placeholder="Ej. 50"></div>
+        <div class="fg"><label>Comunidad Autónoma</label>
+          <select id="projCA"><option value="">Seleccionar…</option><option>Andalucía</option><option>Aragón</option><option>Castilla-La Mancha</option><option>Castilla y León</option><option>Cataluña</option><option>Extremadura</option><option>Galicia</option><option>Madrid</option><option>Murcia</option><option>Navarra</option><option>País Vasco</option><option>Valencia</option><option>Otro</option></select>
+        </div>
+        <div class="fg"><label>Nodo de conexión</label><input type="text" id="projNodo" placeholder="Ej. SET Jumilla 220kV"></div>
+        <div class="fg"><label>RTB estimado</label><input type="text" id="projRTB" placeholder="Ej. Q4 2026"></div>
+        <div class="fg full"><label>Contexto adicional</label>
+          <textarea id="projContext" placeholder="Estado del proyecto, hitos conocidos, dudas específicas que quieres analizar..."></textarea>
+        </div>
+      </div>
+      <div style="margin-top:14px">
+        <label>Permisos / hitos confirmados</label>
+        <div class="check-group mt1" id="hitosCheck">
+          <label class="ci" onclick="toggleCheck(this)"><input type="checkbox" value="AAP"><span>AAP</span></label>
+          <label class="ci" onclick="toggleCheck(this)"><input type="checkbox" value="AAC"><span>AAC</span></label>
+          <label class="ci" onclick="toggleCheck(this)"><input type="checkbox" value="DIA"><span>DIA</span></label>
+          <label class="ci" onclick="toggleCheck(this)"><input type="checkbox" value="Acceso red CCAA"><span>Acceso red CCAA</span></label>
+          <label class="ci" onclick="toggleCheck(this)"><input type="checkbox" value="Acceso red REE"><span>Acceso red REE</span></label>
+          <label class="ci" onclick="toggleCheck(this)"><input type="checkbox" value="Terrenos firmados"><span>Terrenos firmados</span></label>
+          <label class="ci" onclick="toggleCheck(this)"><input type="checkbox" value="BOJA/BOE"><span>BOJA/BOE</span></label>
+          <label class="ci" onclick="toggleCheck(this)"><input type="checkbox" value="Licencia municipal"><span>Licencia municipal</span></label>
+          <label class="ci" onclick="toggleCheck(this)"><input type="checkbox" value="RAIPRE"><span>RAIPRE</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div id="errorBox" class="error-box hidden"></div>
+
+    <button class="btn-analyze" id="btnAnalyze" onclick="runAnalysis()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Analizar riesgos con IA
+    </button>
+
+    <div class="proc-panel" id="procPanel">
+      <div class="proc-header">
+        <span class="proc-title">Procesando en paralelo</span>
+        <span class="proc-eta" id="procEta"></span>
+      </div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="progFill" style="width:0%"></div></div>
+      <div class="batch-grid" id="batchGrid"></div>
+      <div class="final-step" id="finalStep"><span>Esperando lotes…</span></div>
+    </div>
+  </div>
+
+  <!-- RESULTS PANE -->
+  <div id="pane-results" class="hidden"><div id="resultsContent"></div></div>
+
+  <!-- ABOUT PANE -->
+  <div id="pane-about" class="hidden">
+    <div class="card">
+      <div class="card-title">Instrucciones de uso</div>
+      <div class="md-out">
+        <p><strong>1. API Key</strong> — Introduce tu clave de Anthropic en el banner superior. Se guarda en tu navegador. Puedes obtenerla en <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> (cuenta gratuita disponible).</p>
+        <p><strong>2. Documentos</strong> — Arrastra una carpeta completa del VDR o selecciona archivos individuales. Los .xsig, .p7s y otros formatos no legibles se omiten automáticamente.</p>
+        <p><strong>3. Contexto</strong> — Rellena lo que puedas: nombre, tecnología, CCAA, nodo, RTB. Marca los hitos ya confirmados.</p>
+        <p><strong>4. Analizar</strong> — Los lotes se procesan en paralelo. Tiempo típico: 5-15 segundos independientemente del número de documentos.</p>
+        <p><strong>5. Exportar</strong> — Descarga el informe como .txt o cópialo para pegarlo en un memo de IC.</p>
+        <p style="margin-top:12px"><strong>Formatos legibles:</strong> PDF · DOCX · TXT · XLSX · CSV</p>
+        <p><strong>Normativa cubierta:</strong> RD 1183/2020 · RD 376/2022 · Ley 7/2021 · Ley 24/2013 · RD 413/2014 · PNIEC 2021-2030</p>
+        <p><strong>Tecnologías:</strong> Solar PV · BESS · Eólico · Híbrido PV+BESS</p>
+        <p style="margin-top:12px;font-size:12px;color:var(--text3)">Tu API key se guarda únicamente en localStorage de tu navegador y se envía directamente a api.anthropic.com — nunca pasa por servidores intermedios.</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end .app -->
+
+<script>
+const READABLE = new Set(['pdf','docx','txt','xlsx','xls','csv']);
+const BATCH_SIZE = 2;
+const MAX_CHARS = 800;
+const BATCH_DELAY_MS = 8000;
+
+const SYS_SUMMARIZE = `Eres experto en permitting de renovables en España (RD 1183/2020, RD 376/2022, Ley 7/2021, PNIEC).
+Analiza los documentos y extrae en máximo 400 palabras:
+- Hitos regulatorios (AAP, AAC, DIA, acceso red, terrenos, RAIPRE) con estado y fechas
+- Riesgos de permitting detectados
+- Inconsistencias o datos faltantes
+- Capacidad, nodo, fechas RTB/COD si aparecen
+Responde en texto plano estructurado.`;
+
+const SYS_FINAL = `Eres experto en permitting de renovables en España (RD 1183/2020, RD 376/2022, Ley 24/2013, RD 413/2014, PNIEC 2021-2030, Ley 7/2021) y Due Diligence M&A en renovables.
+RESPONDE SOLO con JSON válido sin backticks ni texto extra:
+{"project":{"name":"","tech":"","mw":"","ca":"","nodo":"","rtb":"","overall_risk":"ROJO|AMARILLO|VERDE","overall_score":0,"summary":""},"scores":{"permitting":0,"ambiental":0,"red":0,"terrenos":0},"hitos":[{"nombre":"","estado":"OK|PENDIENTE|FALTANTE|ND","detalle":"","fecha":null}],"riesgos":[{"nivel":"ROJO|AMARILLO|VERDE","categoria":"","titulo":"","descripcion":"","mitigante":""}],"conclusiones":""}
+overall_score: 0=riesgo máximo, 100=sin riesgo. ROJO<40, AMARILLO 40-70, VERDE>70. Genera 4-8 riesgos con mitigantes concretos y accionables.`;
+
+let files = [], skipped = [], analysisResult = null;
+let doneCount = 0, totalBatches = 0, startTime = 0;
+let apiKey = '';
+
+function checkKey() {}
+function saveKey() {
+  const v = document.getElementById('apiKeyInput').value.trim();
+  if (!v || !v.startsWith('sk-ant')) {
+    alert('La API key debe empezar por sk-ant-...');
+    return;
+  }
+  apiKey = v;
+  setApiBannerOk();
+}
+function setApiBannerOk() {
+  const b = document.getElementById('apiBanner');
+  b.className = 'api-banner api-ok';
+  b.innerHTML = `<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    <div class="api-banner-text"><strong>API key activa ✓</strong>
+    Listo para analizar. <span style="cursor:pointer;text-decoration:underline" onclick="resetKey()">Cambiar clave</span></div>`;
+}
+function resetKey() {
+  apiKey = '';
+  document.getElementById('apiBanner').className = 'api-banner';
+  document.getElementById('apiBanner').innerHTML = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <div class="api-banner-text"><strong>Introduce tu API key de Anthropic</strong>
+    <div class="api-key-row"><input type="password" class="api-key-input" id="apiKeyInput" placeholder="sk-ant-api03-…"><button class="btn-save-key" onclick="saveKey()">Guardar</button></div></div>`;
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('[id^="pane-"]').forEach(t => t.classList.add('hidden'));
+  document.getElementById('pane-' + tab).classList.remove('hidden');
+  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+}
+function toggleCheck(el) { el.classList.toggle('checked'); }
+function onDragOver(e) { e.preventDefault(); document.getElementById('dropZone').classList.add('drag'); }
+function onDragLeave() { document.getElementById('dropZone').classList.remove('drag'); }
+function onDrop(e) {
+  e.preventDefault();
+  document.getElementById('dropZone').classList.remove('drag');
+  const items = e.dataTransfer.items;
+  if (!items) { addFiles(e.dataTransfer.files); return; }
+  const all = []; let pending = 0;
+  for (const item of items) {
+    if (item.kind !== 'file') continue;
+    const entry = item.webkitGetAsEntry?.();
+    if (entry?.isDirectory) { pending++; readDir(entry, all, () => { if (--pending===0) addFiles(all); }); }
+    else { const f = item.getAsFile(); if (f) all.push(f); }
+  }
+  if (pending === 0) addFiles(all);
+}
+function readDir(dir, out, done) {
+  const reader = dir.createReader();
+  const go = () => reader.readEntries(entries => {
+    if (!entries.length) { done(); return; }
+    let p = entries.length;
+    for (const e of entries) {
+      if (e.isFile) e.file(f => { out.push(f); if(--p===0) go(); }, ()=>{ if(--p===0) go(); });
+      else if (e.isDirectory) readDir(e, out, ()=>{ if(--p===0) go(); });
+      else if(--p===0) go();
+    }
+  });
+  go();
+}
+function isReadable(name) { return READABLE.has(name.split('.').pop().toLowerCase()); }
+function addFiles(newFiles) {
+  for (const f of newFiles) {
+    if (files.find(x=>x.name===f.name&&x.size===f.size)) continue;
+    if (isReadable(f.name)) files.push(f);
+    else if (!skipped.includes(f.name)) skipped.push(f.name);
+  }
+  renderFileList();
+}
+function getExtClass(name) {
+  const e = name.split('.').pop().toLowerCase();
+  return {doc:'doc',docx:'doc',xls:'xls',xlsx:'xls',csv:'xls',txt:'txt'}[e]||'';
+}
+function renderFileList() {
+  const wrap = document.getElementById('fileListWrap');
+  if (!files.length && !skipped.length) { wrap.classList.add('hidden'); return; }
+  wrap.classList.remove('hidden');
+  const kb = (files.reduce((s,f)=>s+f.size,0)/1024).toFixed(0);
+  document.getElementById('fileCount').textContent = `${files.length} archivo${files.length!==1?'s':''} · ${kb} KB`;
+  document.getElementById('fileList').innerHTML = files.map((f,i) => {
+    const ext = f.name.split('.').pop().toUpperCase();
+    return `<div class="fitem" id="fi-${i}">
+      <div class="fext ${getExtClass(f.name)}">${ext}</div>
+      <div class="finfo"><div class="fname">${f.name}</div><div class="fmeta">${(f.size/1024).toFixed(0)} KB</div></div>
+      <span class="fstatus" id="fs-${i}"></span>
+      <button class="fremove" onclick="removeFile(${i})">✕</button>
+    </div>`;
+  }).join('');
+  const note = document.getElementById('skippedNote');
+  if (skipped.length) {
+    note.classList.remove('hidden');
+    note.textContent = `Omitidos: ${skipped.slice(0,5).join(', ')}${skipped.length>5?' y '+(skipped.length-5)+' más':''}`;
+  } else note.classList.add('hidden');
+  const batches = Math.ceil(files.length/BATCH_SIZE);
+  const pill = document.getElementById('parallelPill');
+  if (files.length > BATCH_SIZE) {
+    pill.style.display = 'inline-flex';
+    document.getElementById('parallelPillText').textContent = `${batches} lotes en paralelo`;
+  } else pill.style.display = 'none';
+}
+function removeFile(i) { files.splice(i,1); renderFileList(); }
+function clearAll() { files=[]; skipped=[]; renderFileList(); }
+function getCheckedHitos() { return Array.from(document.querySelectorAll('#hitosCheck input:checked')).map(x=>x.value); }
+
+function setBatchCard(i, status) {
+  const card = document.getElementById('bc-'+i);
+  if (!card) return;
+  card.className = 'batch-card ' + status;
+  const lbl = card.querySelector('.bc-label');
+  lbl.className = 'bc-label ' + status;
+  if (status==='active') lbl.innerHTML = `<span class="spinner-sm"></span> Lote ${i+1}`;
+  else if (status==='done') lbl.innerHTML = `✓ Lote ${i+1}`;
+  else if (status==='warn') lbl.innerHTML = `~ Lote ${i+1}`;
+}
+function updateProgress() {
+  const pct = totalBatches>0 ? Math.min(88,(doneCount/totalBatches)*88) : 0;
+  document.getElementById('progFill').style.width = pct+'%';
+  const s = ((Date.now()-startTime)/1000).toFixed(0);
+  document.getElementById('procEta').textContent = `${doneCount}/${totalBatches} lotes · ${s}s`;
+}
+
+async function readFile(file) {
+  return new Promise(res => {
+    const r = new FileReader();
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (ext === 'pdf') {
+      r.onload = e => res({type:'pdf', data:e.target.result.split(',')[1], name:file.name});
+      r.onerror = () => res({type:'skip', name:file.name});
+      r.readAsDataURL(file);
+    } else {
+      r.onload = e => res({type:'text', data:(e.target.result||'').substring(0,MAX_CHARS), name:file.name});
+      r.onerror = () => res({type:'skip', name:file.name});
+      r.readAsText(file,'UTF-8');
+    }
+  });
+}
+
+async function callAPI(system, messages, maxTokens) {
+  const resp = await fetch('https://test.28jjk4mrnv.workers.dev', {
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01'},
+    body: JSON.stringify({model:'claude-haiku-4-5-20251001', max_tokens:maxTokens, system, messages})
+  });
+  const data = await resp.json();
+  if (!resp.ok) throw new Error(data.error?.message || `HTTP ${resp.status}: ${JSON.stringify(data)}`);
+  if (!data.content) throw new Error(`Respuesta inesperada: ${JSON.stringify(data)}`);
+  return data.content.map(b=>b.text||'').join('');
+}
+
+async function summarizeBatch(batch, bi, indices) {
+  setBatchCard(bi, 'active');
+  indices.forEach(fi => {
+    const el=document.getElementById('fi-'+fi), st=document.getElementById('fs-'+fi);
+    if(el) el.className='fitem processing';
+    if(st){st.className='fstatus processing';st.textContent='Procesando…';}
+  });
+  const read = await Promise.all(batch.map(f => readFile(f).catch(()=>({type:'skip',name:f.name}))));
+  const content = [];
+  for (const f of read) {
+    if (f.type==='pdf') content.push({type:'document',source:{type:'base64',media_type:'application/pdf',data:f.data}});
+    else if (f.type==='text'&&f.data.trim()) content.push({type:'text',text:`[${f.name}]\n${f.data}`});
+  }
+  let summary = `[Lote ${bi+1}: sin contenido legible]`;
+  if (content.length > 0) {
+    content.push({type:'text',text:'Extrae información clave de permitting.'});
+    try {
+      summary = `=== LOTE ${bi+1}: ${batch.map(f=>f.name).join(', ')} ===\n` + await callAPI(SYS_SUMMARIZE, [{role:'user',content}], 600);
+      setBatchCard(bi,'done');
+    } catch(e) {
+      summary = `[Lote ${bi+1}: error — ${e.message}]`;
+      setBatchCard(bi,'warn');
+    }
+  } else setBatchCard(bi,'done');
+  indices.forEach(fi => {
+    const el=document.getElementById('fi-'+fi), st=document.getElementById('fs-'+fi);
+    if(el) el.className='fitem done';
+    if(st){st.className='fstatus done';st.textContent='✓';}
+  });
+  doneCount++; updateProgress();
+  return summary;
+}
+
+async function runAnalysis() {
+  const btn = document.getElementById('btnAnalyze');
+  const errBox = document.getElementById('errorBox');
+  errBox.classList.add('hidden');
+
+  if (!apiKey || !apiKey.startsWith('sk-')) {
+    errBox.textContent = 'Introduce y guarda tu API key de Anthropic primero.';
+    errBox.classList.remove('hidden'); return;
+  }
+  const name=document.getElementById('projName').value;
+  const tech=document.getElementById('projTech').value;
+  const mw=document.getElementById('projMW').value;
+  const ca=document.getElementById('projCA').value;
+  const nodo=document.getElementById('projNodo').value;
+  const rtb=document.getElementById('projRTB').value;
+  const ctx=document.getElementById('projContext').value;
+  const hitos=getCheckedHitos();
+  if (!name&&!tech&&!ctx&&!files.length) {
+    errBox.textContent='Añade documentos o rellena al menos el nombre y tecnología.';
+    errBox.classList.remove('hidden'); return;
+  }
+
+  btn.disabled=true; doneCount=0; startTime=Date.now();
+  const batches=[], batchIdx=[];
+  for(let i=0;i<files.length;i+=BATCH_SIZE){
+    batches.push(files.slice(i,i+BATCH_SIZE));
+    batchIdx.push(Array.from({length:Math.min(BATCH_SIZE,files.length-i)},(_,k)=>i+k));
+  }
+  totalBatches=batches.length;
+
+  const procPanel=document.getElementById('procPanel');
+  procPanel.style.display='block';
+  document.getElementById('progFill').style.width='0%';
+  document.getElementById('batchGrid').innerHTML = batches.length
+    ? batches.map((b,i)=>`<div class="batch-card" id="bc-${i}"><div class="bc-label">Lote ${i+1}</div><div class="bc-files">${b.map(f=>f.name).join(', ')}</div></div>`).join('')
+    : '<div style="font-size:13px;color:var(--text2)">Sin documentos — análisis basado en formulario</div>';
+  const finalStep=document.getElementById('finalStep');
+  finalStep.className='final-step';
+  finalStep.innerHTML='<span>Esperando lotes…</span>';
+  updateProgress();
+
+  try {
+    const summaries = [];
+    for(let i=0;i<batches.length;i++){
+      if(i>0) await new Promise(r=>setTimeout(r,BATCH_DELAY_MS));
+      const s = await summarizeBatch(batches[i],i,batchIdx[i]);
+      summaries.push(s);
+    }
+
+    document.getElementById('progFill').style.width='92%';
+    finalStep.className='final-step active';
+    finalStep.innerHTML='<span class="spinner-sm"></span><span style="margin-left:6px">Generando análisis de riesgos…</span>';
+
+    const userMsg=`Analiza este proyecto renovable:
+DATOS:
+- Nombre: ${name||'No indicado'}
+- Tecnología: ${tech||'No indicada'}
+- Potencia: ${mw?mw+' MW':'No indicada'}
+- CCAA: ${ca||'No indicada'}
+- Nodo: ${nodo||'No indicado'}
+- RTB: ${rtb||'No indicado'}
+- Permisos confirmados: ${hitos.length?hitos.join(', '):'Ninguno'}
+- Contexto: ${ctx||'No indicado'}
+${summaries.length?'\nDOCUMENTACIÓN ANALIZADA:\n\n'+summaries.join('\n\n'):'\nSin documentación adjunta.'}
+Genera el análisis completo en JSON.`;
+
+    const raw = await callAPI(SYS_FINAL, [{role:'user',content:userMsg}], 3000);
+    let json;
+    try { json=JSON.parse(raw.replace(/```json|```/g,'').trim()); }
+    catch(e) { throw new Error('Respuesta JSON inválida. Inténtalo de nuevo.'); }
+
+    document.getElementById('progFill').style.width='100%';
+    const elapsed=((Date.now()-startTime)/1000).toFixed(1);
+    finalStep.className='final-step done';
+    finalStep.innerHTML=`✓ Informe generado en ${elapsed}s`;
+    analysisResult=json;
+
+    setTimeout(()=>{
+      procPanel.style.display='none';
+      btn.disabled=false;
+      renderResults(json);
+      document.getElementById('tab-btn-results').classList.remove('hidden');
+      switchTab('results');
+    },700);
+
+  } catch(err) {
+    btn.disabled=false;
+    errBox.textContent='Error: '+(err.message||'Algo salió mal. Comprueba tu API key.');
+    errBox.classList.remove('hidden');
+  }
+}
+
+function rc(r){return(r||'').toLowerCase();}
+function rl(r){return r==='ROJO'?'Riesgo Alto':r==='AMARILLO'?'Riesgo Medio':'Riesgo Bajo';}
+function scC(v){return v>=70?'verde':v>=40?'amarillo':'rojo';}
+function hitoSt(s){
+  const m={OK:'ok',PENDIENTE:'pendiente',FALTANTE:'faltante',ND:'nd'};
+  const l={OK:'Disponible',PENDIENTE:'Pendiente',FALTANTE:'Faltante',ND:'Sin info'};
+  return `<span class="hst ${m[s]||'nd'}">${l[s]||s}</span>`;
+}
+
+function renderResults(d) {
+  const p=d.project||{},sc=d.scores||{},hitos=d.hitos||[],riesgos=d.riesgos||[];
+  document.getElementById('resultsContent').innerHTML=`
+    <div class="card">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px">
+        <div><div style="font-size:18px;font-weight:600">${p.name||'Proyecto analizado'}</div>
+        <div style="font-size:13px;color:var(--text2);margin-top:2px">${[p.tech,p.mw?p.mw+' MW':null,p.ca].filter(Boolean).join(' · ')}</div></div>
+        <span class="risk-badge ${rc(p.overall_risk)}"><span class="rdot"></span>${rl(p.overall_risk)} · ${Math.round(p.overall_score||0)}/100</span>
+      </div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6">${p.summary||''}</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Scores por área</div>
+      <div class="score-grid">${['permitting','ambiental','red','terrenos'].map(k=>`<div class="sc ${scC(sc[k]||0)}"><div class="sc-l">${k.charAt(0).toUpperCase()+k.slice(1)}</div><div class="sc-v">${Math.round(sc[k]||0)}</div></div>`).join('')}</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Hitos regulatorios</div>
+      <div class="hgrid">${hitos.map(h=>`<div class="hitem"><div class="hname">${h.nombre}</div><div class="hval">${h.detalle||'—'}</div>${hitoSt(h.estado)}${h.fecha?`<div style="font-size:11px;color:var(--text3);margin-top:2px">${h.fecha}</div>`:''}</div>`).join('')}</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Riesgos detectados</div>
+      ${riesgos.map(r=>`<div class="ritem"><div class="rih"><span class="rpill ${rc(r.nivel)}">${r.nivel}</span><span class="rtitle">${r.titulo||''}</span></div><div class="rdesc">${r.descripcion||''}</div>${r.mitigante?`<div class="rmit"><strong>Mitigante:</strong> ${r.mitigante}</div>`:''}</div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-title">Conclusiones</div>
+      <div class="md-out"><p>${d.conclusiones||''}</p></div>
+      <div class="exp-row">
+        <button class="btn-exp" onclick="exportPDF()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Exportar PDF</button>
+        <button class="btn-exp" onclick="copyReport(event)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copiar</button>
+        <button class="btn-exp" onclick="switchTab('input')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>Nuevo análisis</button>
+      </div>
+    </div>
+    <div class="disclaimer">⚠ Análisis orientativo. No sustituye una DD completa. Verificar con equipo técnico y legal antes de decisiones de inversión.</div>`;
+}
+
+function genTXT(){
+  if(!analysisResult)return'';
+  const d=analysisResult,p=d.project||{};
+  return['═══════════════════════════════════════════════════',
+    '  PERMITSCAN AI — INFORME DE RIESGOS DE PERMITTING',
+    '═══════════════════════════════════════════════════',
+    `Proyecto: ${p.name||'—'} | ${p.tech||'—'} | ${p.mw||'—'} MW`,
+    `CCAA: ${p.ca||'—'} | Nodo: ${p.nodo||'—'} | RTB: ${p.rtb||'—'}`,
+    `Riesgo global: ${p.overall_risk} (${p.overall_score}/100)`,
+    '',p.summary||'',
+    '\n─── SCORES ────────────────────────────────────────',
+    ...Object.entries(d.scores||{}).map(([k,v])=>`${k}: ${v}/100`),
+    '\n─── HITOS ─────────────────────────────────────────',
+    ...(d.hitos||[]).map(h=>`• ${h.nombre}: ${h.estado} — ${h.detalle||''} ${h.fecha?'('+h.fecha+')':''}`),
+    '\n─── RIESGOS ────────────────────────────────────────',
+    ...(d.riesgos||[]).flatMap(r=>[`[${r.nivel}] ${r.titulo}`,`  ${r.descripcion}`,r.mitigante?`  → Mitigante: ${r.mitigante}`:'','']),
+    '─── CONCLUSIONES ───────────────────────────────────',
+    d.conclusiones||'',
+    `\nGenerado: ${new Date().toLocaleDateString('es-ES')} · PermitScan AI`,
+    '═══════════════════════════════════════════════════'].join('\n');
+}
+function copyReport(e){
+  navigator.clipboard.writeText(genTXT()).then(()=>{
+    const btn=e.target.closest('button'),orig=btn.innerHTML;
+    btn.textContent='✓ Copiado';setTimeout(()=>btn.innerHTML=orig,2000);
+  });
+}
+
+function exportPDF(){
+  if(!analysisResult)return;
+  const d=analysisResult, p=d.project||{}, sc=d.scores||{}, hitos=d.hitos||[], riesgos=d.riesgos||[];
+  const fecha = new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'long',year:'numeric'});
+
+  const riskColor = r => r==='ROJO'?'#C0392B':r==='AMARILLO'?'#B06000':'#2D7A45';
+  const riskBg = r => r==='ROJO'?'#FDECEA':r==='AMARILLO'?'#FFF4E0':'#EAF4EE';
+  const riskLabel = r => r==='ROJO'?'ALTO':r==='AMARILLO'?'MEDIO':'BAJO';
+  const hitoColor = s => s==='OK'?'#2D7A45':s==='PENDIENTE'?'#B06000':s==='FALTANTE'?'#C0392B':'#888';
+  const hitoBg = s => s==='OK'?'#EAF4EE':s==='PENDIENTE'?'#FFF4E0':s==='FALTANTE'?'#FDECEA':'#F0EEE9';
+  const hitoLabel = s => s==='OK'?'Disponible':s==='PENDIENTE'?'Pendiente':s==='FALTANTE'?'Faltante':'Sin info';
+  const scoreColor = v => v>=70?'#2D7A45':v>=40?'#B06000':'#C0392B';
+  const overallColor = riskColor(p.overall_risk||'AMARILLO');
+
+  const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&family=Source+Serif+4:wght@400;600&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Source Sans 3',Arial,sans-serif;color:#1A1916;background:#fff;font-size:10pt;line-height:1.5}
+  
+  /* COVER PAGE */
+  .cover{min-height:100vh;display:flex;flex-direction:column;background:#fff;page-break-after:always}
+  .cover-top{background:#0A2647;padding:32px 48px;display:flex;justify-content:space-between;align-items:center}
+  .cover-logo{color:#fff;font-size:13pt;font-weight:700;letter-spacing:.05em}
+  .cover-logo span{color:#4A9FD4;font-size:10pt;font-weight:400;display:block;letter-spacing:.08em;margin-top:2px}
+  .cover-date{color:rgba(255,255,255,.6);font-size:9pt}
+  .cover-band{background:#1A5FA8;height:6px}
+  .cover-body{flex:1;padding:60px 48px 48px;display:flex;flex-direction:column;justify-content:space-between}
+  .cover-tag{font-size:9pt;font-weight:600;color:#1A5FA8;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px}
+  .cover-title{font-family:'Source Serif 4',Georgia,serif;font-size:28pt;font-weight:600;color:#0A2647;line-height:1.2;margin-bottom:8px}
+  .cover-subtitle{font-size:13pt;color:#6B6860;margin-bottom:40px}
+  .cover-meta{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px}
+  .cover-meta-item{padding:14px 16px;border:1px solid #E0DDD8;border-radius:6px}
+  .cover-meta-label{font-size:8pt;font-weight:600;color:#9E9B95;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+  .cover-meta-value{font-size:11pt;font-weight:600;color:#1A1916}
+  .cover-risk{display:inline-flex;align-items:center;gap:10px;padding:14px 20px;border-radius:8px;margin-bottom:40px}
+  .cover-risk-dot{width:12px;height:12px;border-radius:50%}
+  .cover-risk-label{font-size:11pt;font-weight:600}
+  .cover-risk-score{font-size:10pt;color:#6B6860}
+  .cover-footer{border-top:1px solid #E0DDD8;padding-top:20px;display:flex;justify-content:space-between;align-items:center}
+  .cover-footer-left{font-size:8.5pt;color:#9E9B95}
+  .cover-footer-right{font-size:8.5pt;color:#9E9B95;text-align:right}
+  .confidential{font-size:8pt;font-weight:600;color:#C0392B;letter-spacing:.08em;text-transform:uppercase}
+
+  /* CONTENT PAGES */
+  .page{padding:48px;page-break-inside:avoid}
+  .page-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:16px;border-bottom:2px solid #0A2647;margin-bottom:32px}
+  .page-header-title{font-size:9pt;font-weight:600;color:#0A2647;text-transform:uppercase;letter-spacing:.08em}
+  .page-header-project{font-size:8.5pt;color:#9E9B95}
+  .section{margin-bottom:36px}
+  .section-title{font-size:13pt;font-weight:700;color:#0A2647;margin-bottom:4px;padding-bottom:8px;border-bottom:1px solid #E0DDD8}
+  .section-subtitle{font-size:8.5pt;color:#9E9B95;margin-bottom:16px;font-style:italic}
+  .summary-text{font-size:10.5pt;color:#2C2C2A;line-height:1.7;padding:16px;background:#F7F6F3;border-left:4px solid #1A5FA8;border-radius:0 6px 6px 0}
+
+  /* SCORE CARDS */
+  .scores{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:8px}
+  .score-card{padding:14px;border-radius:8px;border:1px solid #E0DDD8;text-align:center}
+  .score-label{font-size:8pt;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#6B6860;margin-bottom:4px}
+  .score-value{font-size:22pt;font-weight:700}
+
+  /* HITOS TABLE */
+  table{width:100%;border-collapse:collapse;font-size:9.5pt}
+  th{background:#0A2647;color:#fff;padding:10px 12px;text-align:left;font-weight:600;font-size:8.5pt;letter-spacing:.04em;text-transform:uppercase}
+  td{padding:10px 12px;border-bottom:1px solid #E0DDD8;vertical-align:top}
+  tr:nth-child(even) td{background:#F7F6F3}
+  .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:8pt;font-weight:600}
+
+  /* RISK TABLE */
+  .risk-row td{padding:12px}
+  .risk-number{font-size:8pt;font-weight:700;color:#9E9B95;width:28px}
+  .risk-category{font-size:8pt;color:#6B6860;margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
+  .risk-title{font-size:10pt;font-weight:600;color:#1A1916;margin-bottom:4px}
+  .risk-desc{font-size:9pt;color:#444;line-height:1.5}
+  .risk-mit-box{margin-top:8px;padding:8px 10px;background:#EAF1FB;border-radius:4px;font-size:8.5pt;color:#1A5FA8;border-left:3px solid #1A5FA8}
+  .risk-mit-label{font-weight:700;margin-right:4px}
+
+  /* CONCLUSIONS */
+  .conclusion-box{padding:20px 24px;background:#F7F6F3;border-radius:8px;border:1px solid #E0DDD8;font-size:10.5pt;line-height:1.7;color:#2C2C2A}
+  .disclaimer{margin-top:24px;padding:12px 16px;background:#FFF4E0;border:1px solid rgba(176,96,0,.25);border-radius:6px;font-size:8.5pt;color:#B06000;line-height:1.5}
+
+  /* PAGE FOOTER */
+  .page-footer{margin-top:40px;padding-top:12px;border-top:1px solid #E0DDD8;display:flex;justify-content:space-between;font-size:8pt;color:#9E9B95}
+
+  @media print{
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .cover{page-break-after:always}
+    .no-break{page-break-inside:avoid}
+  }
+</style>
+</head><body>
+
+<!-- ══════════════ COVER PAGE ══════════════ -->
+<div class="cover">
+  <div class="cover-top">
+    <div class="cover-logo">PermitScan AI<span>PERMITTING RISK ANALYSIS</span></div>
+    <div class="cover-date">${fecha}</div>
+  </div>
+  <div class="cover-band"></div>
+  <div class="cover-body">
+    <div>
+      <div class="cover-tag">Technical Advisory Report · España</div>
+      <div class="cover-title">${p.name||'Proyecto Renovable'}</div>
+      <div class="cover-subtitle">Permitting Risk Assessment — ${p.tech||'—'}</div>
+
+      <div class="cover-risk" style="background:${riskBg(p.overall_risk||'AMARILLO')}">
+        <div class="cover-risk-dot" style="background:${overallColor}"></div>
+        <div>
+          <div class="cover-risk-label" style="color:${overallColor}">Riesgo ${riskLabel(p.overall_risk||'AMARILLO')}</div>
+          <div class="cover-risk-score">Score global: ${p.overall_score||0}/100</div>
+        </div>
+      </div>
+
+      <div class="cover-meta">
+        <div class="cover-meta-item"><div class="cover-meta-label">Tecnología</div><div class="cover-meta-value">${p.tech||'—'}</div></div>
+        <div class="cover-meta-item"><div class="cover-meta-label">Potencia</div><div class="cover-meta-value">${p.mw||'—'} MW</div></div>
+        <div class="cover-meta-item"><div class="cover-meta-label">Comunidad Autónoma</div><div class="cover-meta-value">${p.ca||'—'}</div></div>
+        <div class="cover-meta-item"><div class="cover-meta-label">Nodo de conexión</div><div class="cover-meta-value">${p.nodo||'—'}</div></div>
+        <div class="cover-meta-item"><div class="cover-meta-label">RTB estimado</div><div class="cover-meta-value">${p.rtb||'—'}</div></div>
+        <div class="cover-meta-item"><div class="cover-meta-label">Fecha de análisis</div><div class="cover-meta-value">${fecha}</div></div>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      <div class="cover-footer-left">
+        <div style="font-weight:600;color:#0A2647;margin-bottom:2px">PermitScan AI · España</div>
+        <div>Análisis automatizado de riesgos de permitting · Solar PV · BESS · Eólico</div>
+      </div>
+      <div class="cover-footer-right">
+        <div class="confidential">Confidencial</div>
+        <div style="margin-top:4px">Uso interno — no distribuir</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 2: EXECUTIVE SUMMARY + SCORES ══════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-title">Permitting Risk Assessment</div>
+    <div class="page-header-project">${p.name||'—'} · ${fecha}</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">1. Resumen Ejecutivo</div>
+    <div class="section-subtitle">Síntesis del estado de permitting y nivel de riesgo global</div>
+    <div class="summary-text">${p.summary||'—'}</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">2. Scoring por Área</div>
+    <div class="section-subtitle">Evaluación 0–100 por dimensión (0 = riesgo máximo, 100 = sin riesgo)</div>
+    <div class="scores">
+      ${['permitting','ambiental','red','terrenos'].map(k=>`
+        <div class="score-card">
+          <div class="score-label">${k.charAt(0).toUpperCase()+k.slice(1)}</div>
+          <div class="score-value" style="color:${scoreColor(sc[k]||0)}">${sc[k]||0}</div>
+        </div>`).join('')}
+    </div>
+  </div>
+
+  <div class="section no-break">
+    <div class="section-title">3. Estado de Hitos Regulatorios</div>
+    <div class="section-subtitle">Revisión del estado de los principales hitos administrativos y regulatorios del proyecto</div>
+    <table>
+      <thead><tr><th>Hito</th><th>Estado</th><th>Detalle</th><th>Fecha</th></tr></thead>
+      <tbody>
+        ${hitos.map(h=>`<tr>
+          <td style="font-weight:600">${h.nombre}</td>
+          <td><span class="badge" style="background:${hitoBg(h.estado)};color:${hitoColor(h.estado)}">${hitoLabel(h.estado)}</span></td>
+          <td>${h.detalle||'—'}</td>
+          <td style="white-space:nowrap;color:#6B6860">${h.fecha||'—'}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-footer">
+    <div>PermitScan AI · Permitting Risk Assessment</div>
+    <div>${p.name||'—'} · Página 2</div>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 3: RISK TABLE ══════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-title">Permitting Risk Assessment</div>
+    <div class="page-header-project">${p.name||'—'} · ${fecha}</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">4. Matriz de Riesgos de Permitting</div>
+    <div class="section-subtitle">Riesgos identificados con nivel de criticidad, descripción y mitigantes recomendados</div>
+    <table>
+      <thead><tr><th style="width:28px">#</th><th style="width:80px">Nivel</th><th style="width:90px">Categoría</th><th>Riesgo y descripción</th></tr></thead>
+      <tbody>
+        ${riesgos.map((r,i)=>`<tr class="risk-row">
+          <td class="risk-number">${i+1}</td>
+          <td><span class="badge" style="background:${riskBg(r.nivel)};color:${riskColor(r.nivel)}">${riskLabel(r.nivel)}</span></td>
+          <td style="font-size:8.5pt;color:#6B6860;font-weight:600;text-transform:uppercase;letter-spacing:.03em">${r.categoria||'—'}</td>
+          <td>
+            <div class="risk-title">${r.titulo||''}</div>
+            <div class="risk-desc">${r.descripcion||''}</div>
+            ${r.mitigante?`<div class="risk-mit-box"><span class="risk-mit-label">Mitigante:</span>${r.mitigante}</div>`:''}
+          </td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-footer">
+    <div>PermitScan AI · Permitting Risk Assessment</div>
+    <div>${p.name||'—'} · Página 3</div>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 4: CONCLUSIONS ══════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-title">Permitting Risk Assessment</div>
+    <div class="page-header-project">${p.name||'—'} · ${fecha}</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">5. Conclusiones y Recomendación</div>
+    <div class="section-subtitle">Valoración final para el equipo de Business Development / M&A</div>
+    <div class="conclusion-box">${d.conclusiones||'—'}</div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>Aviso importante:</strong> Este informe ha sido generado mediante análisis automatizado con inteligencia artificial y tiene carácter orientativo. No sustituye una Due Diligence técnica completa realizada por un Technical Advisor cualificado. Los riesgos identificados deben ser verificados por equipos técnicos y legales especializados antes de tomar decisiones de inversión. PermitScan AI, ${fecha}.
+  </div>
+
+  <div class="page-footer">
+    <div>PermitScan AI · Permitting Risk Assessment</div>
+    <div>${p.name||'—'} · Página 4</div>
+  </div>
+</div>
+
+</body></html>`;
+
+  // Open in new window and trigger print dialog
+  const win = window.open('','_blank');
+  win.document.write(html);
+  win.document.close();
+  win.onload = () => {
+    setTimeout(() => win.print(), 800);
+  };
+}
+</script>
+</body>
+</html>
