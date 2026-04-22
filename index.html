@@ -5,31 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PermitScan AI · España</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   :root{
-    --bg:#F7F6F3;--surface:#FFF;--surface2:#F0EEE9;
-    --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);
-    --text:#1A1916;--text2:#6B6860;--text3:#9E9B95;
-    --green:#2D7A45;--green-bg:#EAF4EE;
-    --amber:#B06000;--amber-bg:#FFF4E0;
-    --red:#C0392B;--red-bg:#FDECEA;
-    --blue:#1A5FA8;--blue-bg:#EAF1FB;
-    --accent:#1A5FA8;
-    --font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
-    --r:10px;--rl:16px;
+    --bg:#0D0F14;--surface:#141720;--surface2:#1C2030;--surface3:#242840;
+    --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.10);--border3:rgba(255,255,255,0.16);
+    --text:#E8EAF0;--text2:#8B90A0;--text3:#555C70;
+    --green:#22C55E;--green-bg:rgba(34,197,94,0.1);--green-border:rgba(34,197,94,0.25);
+    --amber:#F59E0B;--amber-bg:rgba(245,158,11,0.1);--amber-border:rgba(245,158,11,0.25);
+    --red:#EF4444;--red-bg:rgba(239,68,68,0.1);--red-border:rgba(239,68,68,0.25);
+    --blue:#3B82F6;--blue-bg:rgba(59,130,246,0.1);--blue-border:rgba(59,130,246,0.25);
+    --accent:#3B82F6;--accent2:#6366F1;
+    --font:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
+    --r:8px;--rl:12px;
   }
   body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6}
-  .app{max-width:900px;margin:0 auto;padding:2rem 1.5rem}
+  .app{max-width:960px;margin:0 auto;padding:2rem 1.5rem}
 
   /* Header */
-  .header{margin-bottom:2rem}
-  .header-top{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-  .logo{width:32px;height:32px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center}
+  .header{margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+  .header-top{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+  .logo{width:36px;height:36px;background:linear-gradient(135deg,#3B82F6,#6366F1);border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(59,130,246,0.3)}
   .logo svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2}
-  .app-name{font-size:13px;font-weight:500;color:var(--text2);letter-spacing:.05em;text-transform:uppercase}
-  h1{font-size:28px;font-weight:600;letter-spacing:-.01em}
-  .header p{color:var(--text2);margin-top:6px;font-size:14px}
+  .app-name{font-size:11px;font-weight:600;color:var(--text3);letter-spacing:.1em;text-transform:uppercase}
+  .header-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border);letter-spacing:.05em;text-transform:uppercase}
+  h1{font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--text)}
+  .header p{color:var(--text2);margin-top:6px;font-size:13px}
 
   /* API key banner */
   .api-banner{background:var(--amber-bg);border:1px solid rgba(176,96,0,.25);border-radius:var(--rl);padding:14px 16px;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:12px}
@@ -37,7 +38,7 @@
   .api-banner-text{flex:1;font-size:13px;color:var(--amber)}
   .api-banner-text strong{display:block;margin-bottom:4px;font-weight:600}
   .api-key-row{display:flex;gap:8px;margin-top:8px}
-  .api-key-input{flex:1;padding:7px 10px;border:1px solid rgba(176,96,0,.3);border-radius:var(--r);font-family:var(--mono);font-size:12px;background:#fff;color:var(--text);outline:none}
+  .api-key-input{flex:1;padding:7px 10px;border:1px solid var(--border2);border-radius:var(--r);font-family:var(--mono);font-size:12px;background:var(--surface2);color:var(--text);outline:none}
   .api-key-input:focus{border-color:var(--amber)}
   .btn-save-key{padding:7px 14px;background:var(--amber);color:#fff;border:none;border-radius:var(--r);font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer}
   .btn-save-key:hover{background:#8F4E00}
@@ -46,19 +47,20 @@
   .api-ok .api-banner-text{color:var(--green)}
 
   /* Tabs */
-  .tabs{display:flex;border-bottom:1px solid var(--border2);margin-bottom:1.5rem}
-  .tab{padding:8px 18px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;user-select:none}
-  .tab:hover{color:var(--text)}
-  .tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+  .tabs{display:flex;gap:4px;margin-bottom:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:4px}
+  .tab{padding:6px 16px;font-size:12px;font-weight:500;color:var(--text2);cursor:pointer;border-radius:6px;transition:all .15s;user-select:none}
+  .tab:hover{color:var(--text);background:var(--surface2)}
+  .tab.active{color:#fff;background:var(--accent)}
   .tab.hidden{display:none}
 
   /* Card */
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:1.5rem;margin-bottom:1rem}
-  .card-title{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:1rem}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:1.5rem;margin-bottom:1rem;transition:border-color .2s}
+  .card:hover{border-color:var(--border2)}
+  .card-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem}
 
   /* Upload */
-  .upload-zone{border:2px dashed var(--border2);border-radius:var(--rl);padding:1.75rem 1.5rem;text-align:center;cursor:pointer;transition:all .2s}
-  .upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:var(--blue-bg)}
+  .upload-zone{border:2px dashed var(--border2);border-radius:var(--rl);padding:1.75rem 1.5rem;text-align:center;cursor:pointer;transition:all .2s;background:var(--surface2)}
+  .upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:rgba(59,130,246,0.05)}
   .uicon{width:44px;height:44px;margin:0 auto 12px;background:var(--blue-bg);border-radius:12px;display:flex;align-items:center;justify-content:center}
   .uicon svg{width:22px;height:22px;stroke:var(--blue);fill:none;stroke-width:1.5}
   .utitle{font-size:15px;font-weight:500;margin-bottom:4px}
@@ -101,20 +103,23 @@
   .fg{display:flex;flex-direction:column;gap:4px}
   .fg.full{grid-column:1/-1}
   label{font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}
-  select,input[type=text],input[type=number],textarea{padding:8px 10px;border:1px solid var(--border2);border-radius:var(--r);font-family:var(--font);font-size:13px;color:var(--text);background:var(--surface);outline:none;transition:border-color .15s;width:100%}
-  select:focus,input:focus,textarea:focus{border-color:var(--accent)}
+  select,input[type=text],input[type=number],textarea{padding:9px 12px;border:1px solid var(--border2);border-radius:var(--r);font-family:var(--font);font-size:13px;color:var(--text);background:var(--surface2);outline:none;transition:all .15s;width:100%}
+  select:focus,input:focus,textarea:focus{border-color:var(--accent);background:var(--surface);box-shadow:0 0 0 3px rgba(59,130,246,0.1)}
+  select option{background:var(--surface2)}
   textarea{resize:vertical;min-height:80px;line-height:1.5}
   .check-group{display:flex;flex-wrap:wrap;gap:7px}
-  .ci{display:flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid var(--border2);border-radius:20px;cursor:pointer;transition:all .15s;user-select:none}
+  .ci{display:flex;align-items:center;gap:6px;padding:5px 12px;border:1px solid var(--border);border-radius:20px;cursor:pointer;transition:all .15s;user-select:none;background:var(--surface2)}
   .ci:hover{border-color:var(--accent);background:var(--blue-bg)}
   .ci input{width:13px;height:13px;accent-color:var(--accent);cursor:pointer}
-  .ci span{font-size:12px;font-weight:500}
+  .ci span{font-size:12px;font-weight:500;color:var(--text2)}
   .ci.checked{border-color:var(--accent);background:var(--blue-bg);color:var(--blue)}
+  .ci.checked span{color:var(--blue)}
 
   /* Analyze button */
-  .btn-analyze{width:100%;padding:13px;background:var(--accent);color:#fff;border:none;border-radius:var(--r);font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:1rem;display:flex;align-items:center;justify-content:center;gap:8px}
-  .btn-analyze:hover:not(:disabled){background:#144D8A}
-  .btn-analyze:disabled{opacity:.5;cursor:not-allowed}
+  .btn-analyze{width:100%;padding:14px;background:linear-gradient(135deg,#3B82F6,#6366F1);color:#fff;border:none;border-radius:var(--r);font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:1rem;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px rgba(59,130,246,0.3);letter-spacing:.01em}
+  .btn-analyze:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 24px rgba(59,130,246,0.4)}
+  .btn-analyze:active:not(:disabled){transform:translateY(0)}
+  .btn-analyze:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
 
   /* Progress */
   .proc-panel{margin-top:1rem;display:none}
@@ -125,9 +130,9 @@
   .progress-bar-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .4s}
   .batch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
   .batch-card{padding:10px 12px;border-radius:var(--r);border:1px solid var(--border);background:var(--surface2);transition:all .3s}
-  .batch-card.active{border-color:rgba(26,95,168,.4);background:var(--blue-bg)}
-  .batch-card.done{border-color:rgba(45,122,69,.4);background:var(--green-bg)}
-  .batch-card.warn{border-color:rgba(176,96,0,.4);background:var(--amber-bg)}
+  .batch-card.active{border-color:var(--blue-border);background:var(--blue-bg)}
+  .batch-card.done{border-color:var(--green-border);background:var(--green-bg)}
+  .batch-card.warn{border-color:var(--amber-border);background:var(--amber-bg)}
   .bc-label{font-size:11px;font-weight:600;color:var(--text2);margin-bottom:4px;display:flex;align-items:center;gap:5px}
   .bc-label.active{color:var(--blue)}
   .bc-label.done{color:var(--green)}
@@ -140,47 +145,71 @@
   @keyframes spin{to{transform:rotate(360deg)}}
 
   /* Results */
-  .risk-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600}
-  .risk-badge.rojo{background:var(--red-bg);color:var(--red)}
-  .risk-badge.amarillo{background:var(--amber-bg);color:var(--amber)}
-  .risk-badge.verde{background:var(--green-bg);color:var(--green)}
-  .rdot{width:8px;height:8px;border-radius:50%;background:currentColor}
+  /* Risk badges */
+  .risk-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;border:1px solid}
+  .risk-badge.rojo{background:var(--red-bg);color:var(--red);border-color:var(--red-border)}
+  .risk-badge.amarillo{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-border)}
+  .risk-badge.verde{background:var(--green-bg);color:var(--green);border-color:var(--green-border)}
+  .rdot{width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 6px currentColor}
+
+  /* Score gauge cards */
   .score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
-  .sc{padding:1rem;border-radius:var(--r);border:1px solid var(--border);text-align:center}
-  .sc .sc-l{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
-  .sc .sc-v{font-size:22px;font-weight:600}
-  .sc.verde{background:var(--green-bg);border-color:rgba(45,122,69,.2)}.sc.verde .sc-v{color:var(--green)}
-  .sc.amarillo{background:var(--amber-bg);border-color:rgba(176,96,0,.2)}.sc.amarillo .sc-v{color:var(--amber)}
-  .sc.rojo{background:var(--red-bg);border-color:rgba(192,57,43,.2)}.sc.rojo .sc-v{color:var(--red)}
-  .ritem{padding:12px 14px;border-radius:var(--r);border:1px solid var(--border);margin-bottom:8px;background:var(--surface)}
-  .rih{display:flex;align-items:flex-start;gap:10px;margin-bottom:6px}
-  .rpill{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;flex-shrink:0;margin-top:1px;text-transform:uppercase;letter-spacing:.04em}
-  .rpill.rojo{background:var(--red-bg);color:var(--red)}
-  .rpill.amarillo{background:var(--amber-bg);color:var(--amber)}
-  .rpill.verde{background:var(--green-bg);color:var(--green)}
-  .rtitle{font-size:13px;font-weight:500}
-  .rdesc{font-size:13px;color:var(--text2);line-height:1.5}
-  .rmit{margin-top:8px;padding:8px 10px;background:var(--surface2);border-radius:6px;font-size:12px;color:var(--text2);border-left:3px solid var(--accent)}
-  .rmit strong{color:var(--text)}
+  .sc{padding:1.25rem 1rem;border-radius:var(--r);border:1px solid var(--border);text-align:center;position:relative;overflow:hidden;transition:border-color .2s}
+  .sc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+  .sc.verde::before{background:var(--green)}.sc.amarillo::before{background:var(--amber)}.sc.rojo::before{background:var(--red)}
+  .sc .sc-l{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-weight:600}
+  .sc .sc-v{font-size:28px;font-weight:700;letter-spacing:-.02em}
+  .sc.verde{background:var(--green-bg);border-color:var(--green-border)}.sc.verde .sc-v{color:var(--green)}
+  .sc.amarillo{background:var(--amber-bg);border-color:var(--amber-border)}.sc.amarillo .sc-v{color:var(--amber)}
+  .sc.rojo{background:var(--red-bg);border-color:var(--red-border)}.sc.rojo .sc-v{color:var(--red)}
+
+  /* Risk items */
+  .ritem{padding:16px;border-radius:var(--r);border:1px solid var(--border);margin-bottom:10px;background:var(--surface);transition:all .2s;position:relative;overflow:hidden}
+  .ritem:hover{border-color:var(--border2);background:var(--surface2)}
+  .ritem-accent{position:absolute;top:0;left:0;bottom:0;width:3px}
+  .ritem-accent.rojo{background:var(--red)}.ritem-accent.amarillo{background:var(--amber)}.ritem-accent.verde{background:var(--green)}
+  .rih{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;padding-left:12px}
+  .rpill{font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;flex-shrink:0;margin-top:1px;text-transform:uppercase;letter-spacing:.06em;border:1px solid}
+  .rpill.rojo{background:var(--red-bg);color:var(--red);border-color:var(--red-border)}
+  .rpill.amarillo{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-border)}
+  .rpill.verde{background:var(--green-bg);color:var(--green);border-color:var(--green-border)}
+  .rtitle{font-size:13px;font-weight:600;color:var(--text);line-height:1.4}
+  .rdesc{font-size:12.5px;color:var(--text2);line-height:1.6;padding-left:12px}
+  .rmit{margin-top:10px;padding:10px 12px;background:rgba(59,130,246,0.06);border-radius:6px;font-size:12px;color:var(--text2);border:1px solid rgba(59,130,246,0.15);margin-left:12px}
+  .rmit strong{color:var(--blue);font-weight:600}
+
+  /* Hitos grid */
   .hgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-  .hitem{padding:10px 12px;border-radius:var(--r);border:1px solid var(--border);background:var(--surface)}
-  .hname{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
-  .hval{font-size:13px;color:var(--text)}
-  .hst{display:inline-block;margin-top:4px;font-size:11px;padding:1px 7px;border-radius:8px;font-weight:500}
-  .hst.ok{background:var(--green-bg);color:var(--green)}
-  .hst.pendiente{background:var(--amber-bg);color:var(--amber)}
-  .hst.faltante{background:var(--red-bg);color:var(--red)}
-  .hst.nd{background:var(--surface2);color:var(--text3)}
-  .btn-exp{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--border2);border-radius:var(--r);font-family:var(--font);font-size:13px;font-weight:500;cursor:pointer;background:var(--surface);color:var(--text);transition:all .15s}
-  .btn-exp:hover{background:var(--surface2);border-color:var(--accent);color:var(--accent)}
-  .exp-row{display:flex;gap:8px;margin-top:1rem;flex-wrap:wrap}
-  .disclaimer{font-size:12px;color:var(--text3);background:var(--surface2);border-radius:var(--r);padding:10px 12px;margin-top:1rem}
-  .error-box{padding:12px 14px;background:var(--red-bg);border:1px solid rgba(192,57,43,.2);border-radius:var(--r);color:var(--red);font-size:13px;margin-top:1rem}
-  .md-out{font-size:13px;color:var(--text2);line-height:1.65}
+  .hitem{padding:12px 14px;border-radius:var(--r);border:1px solid var(--border);background:var(--surface2);transition:all .2s}
+  .hitem:hover{border-color:var(--border2)}
+  .hname{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+  .hval{font-size:13px;color:var(--text);line-height:1.4}
+  .hst{display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:600;border:1px solid}
+  .hst.ok{background:var(--green-bg);color:var(--green);border-color:var(--green-border)}
+  .hst.pendiente{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-border)}
+  .hst.faltante{background:var(--red-bg);color:var(--red);border-color:var(--red-border)}
+  .hst.nd{background:var(--surface3);color:var(--text3);border-color:var(--border)}
+
+  /* Export buttons */
+  .btn-exp{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border:1px solid var(--border2);border-radius:var(--r);font-family:var(--font);font-size:12px;font-weight:500;cursor:pointer;background:var(--surface2);color:var(--text2);transition:all .15s}
+  .btn-exp:hover{background:var(--surface3);border-color:var(--accent);color:var(--text)}
+  .exp-row{display:flex;gap:8px;margin-top:1.25rem;flex-wrap:wrap}
+  .disclaimer{font-size:11.5px;color:var(--text3);background:var(--surface2);border-radius:var(--r);padding:10px 14px;margin-top:1rem;border:1px solid var(--border);line-height:1.5}
+  .error-box{padding:12px 14px;background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--r);color:var(--red);font-size:13px;margin-top:1rem}
+  .md-out{font-size:13px;color:var(--text2);line-height:1.7}
   .md-out p{margin-bottom:8px}
   .md-out strong{color:var(--text);font-weight:600}
   .hidden{display:none}
   .mt1{margin-top:.5rem}
+
+  /* Results hero */
+  .results-hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:2rem;margin-bottom:1rem;position:relative;overflow:hidden}
+  .results-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent)}
+  .results-hero-name{font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.01em;margin-bottom:4px}
+  .results-hero-meta{font-size:13px;color:var(--text2);margin-bottom:20px;display:flex;align-items:center;gap:8px}
+  .results-hero-meta span{color:var(--text3)}
+  .results-hero-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  .results-summary{font-size:13px;color:var(--text2);line-height:1.7;padding:14px;background:var(--surface2);border-radius:var(--r);border:1px solid var(--border);margin-top:16px}
 
   @media(max-width:600px){
     .form-grid{grid-template-columns:1fr}
@@ -197,10 +226,11 @@
   <div class="header">
     <div class="header-top">
       <div class="logo"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
-      <span class="app-name">PermitScan AI · España</span>
+      <span class="app-name">PermitScan AI</span>
+      <span class="header-badge">España · Beta</span>
     </div>
     <h1>Automated Permitting Risk Scanner</h1>
-    <p>Analiza documentación de proyectos renovables y detecta riesgos de permitting automáticamente.</p>
+    <p>Analiza documentación de proyectos renovables y detecta riesgos de permitting con IA.</p>
   </div>
 
   <!-- API Key Banner -->
@@ -231,7 +261,7 @@
       <div class="upload-zone" id="dropZone" ondragover="onDragOver(event)" ondragleave="onDragLeave()" ondrop="onDrop(event)">
         <div class="uicon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
         <div class="utitle">Arrastra carpeta o archivos aquí</div>
-        <div class="usub">Archivos .xsig y no legibles se omiten automáticamente</div>
+        <div class="usub" style="color:var(--text3)">Arrastra documentos del VDR · .xsig y binarios se omiten</div>
         <div class="upload-btns">
           <button class="btn-up" onclick="document.getElementById('iFiles').click();event.stopPropagation()">
             <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Archivos
@@ -651,37 +681,92 @@ function hitoSt(s){
 
 function renderResults(d) {
   const p=d.project||{},sc=d.scores||{},hitos=d.hitos||[],riesgos=d.riesgos||[];
+  const rojos=riesgos.filter(r=>r.nivel==='ROJO').length;
+  const amarillos=riesgos.filter(r=>r.nivel==='AMARILLO').length;
+  const verdes=riesgos.filter(r=>r.nivel==='VERDE').length;
   document.getElementById('resultsContent').innerHTML=`
-    <div class="card">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px">
-        <div><div style="font-size:18px;font-weight:600">${p.name||'Proyecto analizado'}</div>
-        <div style="font-size:13px;color:var(--text2);margin-top:2px">${[p.tech,p.mw?p.mw+' MW':null,p.ca].filter(Boolean).join(' · ')}</div></div>
-        <span class="risk-badge ${rc(p.overall_risk)}"><span class="rdot"></span>${rl(p.overall_risk)} · ${Math.round(p.overall_score||0)}/100</span>
+    <!-- HERO -->
+    <div class="results-hero">
+      <div class="results-hero-name">${p.name||'Proyecto analizado'}</div>
+      <div class="results-hero-meta">
+        ${p.tech?`<span style="color:var(--text)">${p.tech}</span><span>·</span>`:''}
+        ${p.mw?`<span style="color:var(--text)">${p.mw} MW</span><span>·</span>`:''}
+        ${p.ca?`<span style="color:var(--text)">${p.ca}</span>`:''}
       </div>
-      <div style="font-size:13px;color:var(--text2);line-height:1.6">${p.summary||''}</div>
+      <div class="results-hero-bottom">
+        <span class="risk-badge ${rc(p.overall_risk)}">
+          <span class="rdot"></span>${rl(p.overall_risk)} &nbsp;·&nbsp; ${Math.round(p.overall_score||0)}/100
+        </span>
+        <div style="display:flex;gap:6px;align-items:center;font-size:12px;color:var(--text3)">
+          ${rojos>0?`<span style="color:var(--red);font-weight:600">${rojos} crítico${rojos>1?'s':''}</span>`:''}
+          ${rojos>0&&amarillos>0?`<span>·</span>`:''}
+          ${amarillos>0?`<span style="color:var(--amber);font-weight:600">${amarillos} medio${amarillos>1?'s':''}</span>`:''}
+          ${(rojos>0||amarillos>0)&&verdes>0?`<span>·</span>`:''}
+          ${verdes>0?`<span style="color:var(--green);font-weight:600">${verdes} bajo${verdes>1?'s':''}</span>`:''}
+        </div>
+      </div>
+      <div class="results-summary">${p.summary||''}</div>
     </div>
+
+    <!-- SCORES -->
     <div class="card">
       <div class="card-title">Scores por área</div>
-      <div class="score-grid">${['permitting','ambiental','red','terrenos'].map(k=>`<div class="sc ${scC(sc[k]||0)}"><div class="sc-l">${k.charAt(0).toUpperCase()+k.slice(1)}</div><div class="sc-v">${Math.round(sc[k]||0)}</div></div>`).join('')}</div>
-    </div>
-    <div class="card">
-      <div class="card-title">Hitos regulatorios</div>
-      <div class="hgrid">${hitos.map(h=>`<div class="hitem"><div class="hname">${h.nombre}</div><div class="hval">${h.detalle||'—'}</div>${hitoSt(h.estado)}${h.fecha?`<div style="font-size:11px;color:var(--text3);margin-top:2px">${h.fecha}</div>`:''}</div>`).join('')}</div>
-    </div>
-    <div class="card">
-      <div class="card-title">Riesgos detectados</div>
-      ${riesgos.map(r=>`<div class="ritem"><div class="rih"><span class="rpill ${rc(r.nivel)}">${r.nivel}</span><span class="rtitle">${r.titulo||''}</span></div><div class="rdesc">${r.descripcion||''}</div>${r.mitigante?`<div class="rmit"><strong>Mitigante:</strong> ${r.mitigante}</div>`:''}</div>`).join('')}
-    </div>
-    <div class="card">
-      <div class="card-title">Conclusiones</div>
-      <div class="md-out"><p>${d.conclusiones||''}</p></div>
-      <div class="exp-row">
-        <button class="btn-exp" onclick="exportPDF()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Exportar PDF</button>
-        <button class="btn-exp" onclick="copyReport(event)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copiar</button>
-        <button class="btn-exp" onclick="switchTab('input')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>Nuevo análisis</button>
+      <div class="score-grid">${['permitting','ambiental','red','terrenos'].map(k=>`
+        <div class="sc ${scC(sc[k]||0)}">
+          <div class="sc-l">${k==='red'?'Red':k.charAt(0).toUpperCase()+k.slice(1)}</div>
+          <div class="sc-v">${Math.round(sc[k]||0)}</div>
+        </div>`).join('')}
       </div>
     </div>
-    <div class="disclaimer">⚠ Análisis orientativo. No sustituye una DD completa. Verificar con equipo técnico y legal antes de decisiones de inversión.</div>`;
+
+    <!-- HITOS -->
+    <div class="card">
+      <div class="card-title">Hitos regulatorios</div>
+      <div class="hgrid">${hitos.map(h=>`
+        <div class="hitem">
+          <div class="hname">${h.nombre}</div>
+          <div class="hval">${h.detalle||'—'}</div>
+          ${hitoSt(h.estado)}
+          ${h.fecha?`<div style="font-size:11px;color:var(--text3);margin-top:4px;font-family:var(--mono)">${h.fecha}</div>`:''}
+        </div>`).join('')}
+      </div>
+    </div>
+
+    <!-- RIESGOS -->
+    <div class="card">
+      <div class="card-title">Matriz de riesgos · ${riesgos.length} identificados</div>
+      ${riesgos.map(r=>`
+        <div class="ritem">
+          <div class="ritem-accent ${rc(r.nivel)}"></div>
+          <div class="rih">
+            <span class="rpill ${rc(r.nivel)}">${r.nivel}</span>
+            <span class="rtitle">${r.titulo||''}</span>
+          </div>
+          <div class="rdesc">${r.descripcion||''}</div>
+          ${r.mitigante?`<div class="rmit"><strong>Mitigante →</strong> ${r.mitigante}</div>`:''}
+        </div>`).join('')}
+    </div>
+
+    <!-- CONCLUSIONES -->
+    <div class="card">
+      <div class="card-title">Conclusión ejecutiva</div>
+      <div class="md-out"><p>${d.conclusiones||''}</p></div>
+      <div class="exp-row">
+        <button class="btn-exp" onclick="exportPDF()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Exportar PDF
+        </button>
+        <button class="btn-exp" onclick="copyReport(event)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copiar informe
+        </button>
+        <button class="btn-exp" onclick="switchTab('input')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+          Nuevo análisis
+        </button>
+      </div>
+    </div>
+    <div class="disclaimer">⚠ Análisis orientativo generado con IA. No sustituye una Due Diligence técnica completa. Verificar con equipo técnico y legal antes de decisiones de inversión.</div>`;
 }
 
 function genTXT(){
